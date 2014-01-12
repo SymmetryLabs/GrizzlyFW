@@ -11,3 +11,30 @@
 *.lai
 *.la
 *.a
+
+# Object files
+*.o
+*.ko
+*.d
+*.crf
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+*.htm
+*Alexander
+*Alexander*
+*.axf
