@@ -16,29 +16,20 @@ struct ColorFrame {
 	uint8_t index;
 	// Which data frame is used for (FRAME_TYPE_RGB or _DMA)
 	uint8_t type;
-	// Current status of frame (reset to FRAME_ZEROED)
-	uint8_t status;
 	// Each bit represents the channel that has been received and filled
 	uint16_t flags;
-	// Frame number (reset to 0)
-	uint32_t count;
 	
 	// Number of bytes the frame takes up in memory (Set at initialization)
 	uint32_t size;
-	/* Last LocalTime buffer was pushed to FIFO */	
-	uint32_t last_time;
 	
+	// Start time of first pbuf
 	uint32_t start_time;
+
+	// Number of frames sent over DMA
+	uint32_t sent_frame;
 	
-	// Interpolation ratio of last frame sent (< 0.01 = none set, > .99 = last frame sent)
-	float sent_ratio;
-	
-	// Offset of operation currently locking the frame (reset to 0)
-	uint32_t offset;
 	// Pointer to frame in memory (Set at initialization)
 	volatile uint8_t* buffer;
-	// Current rgb buffer being processed
-	uint32_t current_buffer;
 	
 	// Next frame in circular buffer
 	ColorFrame* next;
@@ -47,12 +38,7 @@ struct ColorFrame {
 	
 	// Pointer to pbuf holding channel packet
 	struct pbuf* channels[8];
-	// Last unset pbuf pointer in array
-	uint8_t last_pbuf;
-	// Current pbuf being processed
-	uint8_t current_pbuf;
-	// Offset of current pbuffer
-	uint32_t pbuf_offset;
+	uint32_t channel_offset[8];
 };
 
 /* FIFO worker callback function definition */

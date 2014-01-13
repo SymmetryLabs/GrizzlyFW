@@ -6,83 +6,8 @@
 #include "grizzly.h"
 #include "fifobufs.h"
 
-// FIFO buffer of zeroed RGB frames (frames ready to be filled with data from ethernet)
- ColorFrameFIFO* fifoZeroedRGBFrame;
-// FIFO buffer of zeroed DMA frames (frames ready to be filled with interleaved RGB frames)
- ColorFrameFIFO* fifoZeroedDMAFrame;
-// FIFO buffer of fully Received FIFO frames (frames ready for interpolation or interleaving)
- ColorFrameFIFO* fifoReceivedRGBFrame;
-// FIFO buffer of partially received frames (frames that need to be fixed with interpolation)
- ColorFrameFIFO* fifoPartialRGBFrame;
-// FIFO buffer of interpolated frames (ready to be interleaved)
- ColorFrameFIFO* fifoInterpolatedRGBFrame;
-// FIFO buffer of interleaved frames (ready to be sent over DMA)
- ColorFrameFIFO* fifoInterleavedDMAFrame;
-// FIFO buffer of RGB frames already sent over DMA (kept for backup)
- ColorFrameFIFO* fifoSentRGBFrame;
-// FIFO buffer of RGB and DMA frames ready to be cleaned up
- ColorFrameFIFO* fifoGarbageFrame;
-
-/* 
-	receiver:
-		takes RGB frame from zeroed fifo to partial fifo
-		or fills in frame in partial fifo buffer
-			functions: find frame in fifo from frame number
-		end: decide whether to push partial to recevied
-			functions: pull frame from fifo, newest frame in fifo
-			if parial->frame_num < newest_frame->frame_num
-				push to received
-			if partial->ch flag == 0x00FF
-				push to received
-	interpolator:
-		send to interpolated fifo
-	interleaver:
-		takes DMA Frame from zeroed fifo to dma interleaved fifo
-		(NO INTERMEDIATE POINTERS! use FRAME_INTERLEAVED flag)
-			funcs: find next frame in fifo with status, excluding
-	DMA worker:
-		if timer update interrupt flag is set, disable timer
-		and send frame, move RGB frame to sent frame fifo
-			funcs: find frame with fifo 
-
-
-	fifoZeroedRGBFrame
-			| by receiver worker
-	fifoPartialRGBFrame
-			| by receiver worker
-	fifoReceivedRGBFrame
-			| by DMA worker
-	fifoSentRGBFrame
-			| by DMA worker
-	fifoGarbageFrame
-
-interpolator worker creates ColorFrame in fifoInterpolatedRGBFrame
-	from fram in fifoReceivedFrame and fifoSentFrame
-
-	fifoZeroedDMAFrame
-			| by interleaver worker
-	fifoInterleavedDMAFrame
-			| by DMA worker
-	fifoGarbageFrame
-
-*/
-
 extern void Delay(uint32_t nCount);
 extern __IO uint32_t LocalTime;
-
-void run_dma_worker(void)
-{
-	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET && dmaFillingPtr != dmaFramePtr)
-	{
-		dmaSendRGBFrame(dmaFramePtr);
-		fifoResetFrame(dmaFramePtr->prev);
-		dmaFramePtr = dmaFramePtr->next;
-		
-		dmaStopLEDFrameTimer();
-		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-		dmaInitLEDFrameTimer();
-	}
-}
 
 void run_inner_frame_worker(void)
 {
@@ -185,6 +110,30 @@ void run_inner_frame_worker(void)
 	}
 }
 
+void interpolate_channel(void)
+{
+
+}
+
+void interleave_channel(void)
+{
+
+}
+
+void run_dma_worker(void)
+{
+	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET && dmaFillingPtr != dmaFramePtr)
+	{
+		dmaSendRGBFrame(dmaFramePtr);
+		fifoResetFrame(dmaFramePtr->prev);
+		dmaFramePtr = dmaFramePtr->next;
+		
+		dmaStopLEDFrameTimer();
+		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+		dmaInitLEDFrameTimer();
+	}
+}
+
 void run_receiver(void)
 {
 	/* check if any packet received */
@@ -195,41 +144,103 @@ void run_receiver(void)
 	LwIP_Periodic_Handle(LocalTime);
 }
 
+struct pbuf *cur_pbuf;
+uint32_t *cur_pbuf_offset;
+uint32_t pbuf_channel_num;
+uint32_t current_interp_step;
+
+void run_frame_checker()
+{
+	if (rgbFramePtr->start_time != 0)
+	{
+		if (LocalTime > rgbFramePtr->next->start_time + 10 || rgbFramePtr->next->flags == FRAME_CHANNEL_MASK)
+		{
+			/* Swap next filling frame */
+			fifoResetFrame(rgbFramePtr->prev);
+			rgbFramePtr = rgbFramePtr->next;
+			cur_pbuf = 0;
+			current_interp_step = 0;
+
+			if (rgbFramePtr->prev->sent_frame != 2)
+			{
+				rgbFramePtr->prev->sent_frame = 2;
+
+				/* Interleave entire frame NOW */
+			}
+		}
+	}
+}
+
+void run_pbuf_selector()
+{
+	uint32_t i;
+
+	if (cur_pbuf == 0)
+	{
+		for (i = 0; i < 8; i++)
+		{
+			if (rgbFramePtr->channels[i] != 0 && rgbFramePtr->channel_offset[i] < LEDS_PER_GPIO_CHANNEL)
+			{
+				cur_pbuf = rgbFramePtr->channels[i];
+				cur_pbuf_offset = &(rgbFramePtr->channel_offset[i]);
+				pbuf_channel_num = i;
+				return;
+			}
+		}
+	}
+}
+
+void run_pbuf_worker()
+{
+	uint32_t timeout = 16;
+
+	if (cur_pbuf != 0)
+	{
+		/* if there is room left in the DMA frame buffer */
+		if (dmaFillingPtr != dmaFramePtr->prev)
+		{
+			if (rgbFramePtr->sent_frame == 0)
+			{
+				/* Interpolated frame */
+				interpolate_channel();
+			} else if (rgbFramePtr->sent_frame == 1) {
+				/* Regular frame */
+				interleave_channel();
+			}
+		}
+		/* If dma is done filling */
+		if (*(cur_pbuf_offset) == LEDS_PER_GPIO_CHANNEL)
+		{
+			dmaFillingPtr->flags |= 1 << pbuf_channel_num;
+			cur_pbuf = 0;
+			if (dmaFillingPtr->flags == rgbFramePtr->flags)
+			{
+				dmaFillingPtr = dmaFillingPtr->next;
+				current_interp_step++;
+				rgbFramePtr->sent_frame = current_interp_step;
+			}
+		}
+	}
+}
+
 /* void run_workers(void)
 		Process everything 
 		Packet handling in udp_colorserver.c */
 void run_workers(void)
-{	
-	uint32_t start_time = LocalTime;
+{
 	uint32_t timeout;
 
 	run_receiver();
 
 	run_dma_worker();
 
-	if (rgbFramePtr->start_time != 0)
-	{
-		if (LocalTime > rgbFramePtr->start_time + 10 || rgbFramePtr->next->flags == FRAME_CHANNEL_MASK)
-		{
-			/* Swap next filling frame */
-			
-		}
-	}
-	
-	/* if there is room left in the DMA frame buffer */
-	if (dmaFillingPtr != dmaFramePtr->prev)
-	{
-		if (dmaFillingPtr->offset == LEDS_PER_GPIO_CHANNEL)
-		{
-			dmaFillingPtr = dmaFillingPtr->next;
-		}
-	}
-	dmaFramePtr->flags = rgbFramePtr->flags;
-	dmaFramePtr->offset = 0;
-	rgbFramePtr->offset = 0;
-	rgbFramePtr->flags = 0;
-	fifoResetFrame(rgbFramePtr->prev);
-	rgbFramePtr = rgbFramePtr->next;
+	run_frame_checker();
+
+	// Selects next pbuf to work on
+	run_pbuf_selector();
+
+	// Works on pbuf (interpolates and interleaves)
+	run_pbuf_worker();
 }
 
 void run_lwip_periodic(void)
