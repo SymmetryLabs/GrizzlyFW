@@ -28,6 +28,11 @@ struct ColorFrame {
 	/* Last LocalTime buffer was pushed to FIFO */	
 	uint32_t last_time;
 	
+	uint32_t start_time;
+	
+	// Interpolation ratio of last frame sent (< 0.01 = none set, > .99 = last frame sent)
+	float sent_ratio;
+	
 	// Offset of operation currently locking the frame (reset to 0)
 	uint32_t offset;
 	// Pointer to frame in memory (Set at initialization)

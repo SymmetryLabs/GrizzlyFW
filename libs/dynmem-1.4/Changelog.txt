@@ -1,0 +1,35 @@
+  Version History
+  ---------------
+
+v1.4:  
+	Created the section "Version History".  Studied real behaviour of
+	actual applications. Regular applications tend to require small
+	memory blocks (less than 32 bytes) whereas TLSF is optimised to be
+	used with blocks larger than 32 bytes. Added special lists to deal
+	with blocks smaller than 16 bytes.
+
+	Now TLSF does not round up small blocks up to 32, reducing the
+	overall fragmentation while keeping the same complexity and timing
+	cost. TLSF 1.4 shows a fragmentation that is comparable with that
+	of the Douglas Lea allocator (which is AFAIK, one of the best
+	allocators).
+ 
+v1.3: 
+	Change of concept, now the main TLSF structure is created inside
+	of the beginning of the block instead of being an static
+	structure, allowing multiple TLSFs heaps working at the same time.
+	Now, TLSF uses specific processor instructions to deal with
+	bitmaps.  TLSF sanity functions added to find TLSF overflows.  The
+	TLSF code will not be RTLinux-oriented any more.
+
+	
+v1.1 ...  v1.2: 
+	Many little bugs fixed, code cleaned and splitted in several files
+	because of cosmetic requirements.  Starting from TLSF v1.1, MaRTE
+	OS (http://marte.unican.es) uses the TLSF allocator as its default
+	memory allocator.
+
+v0.1 ... v1.0: 
+	First implementations were created for testing and research
+	purposes.  Basically TLSF is implemented to be used by RTLinux-GPL
+	(www.rtlinux-gpl.org), so it is RTLinux-oriented.

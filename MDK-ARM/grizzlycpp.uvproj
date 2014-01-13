@@ -586,6 +586,56 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>dynmem</GroupName>
+          <Files>
+            <File>
+              <FileName>rtl_malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\rtl_malloc.c</FilePath>
+            </File>
+            <File>
+              <FileName>TLSF_addblock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\TLSF_addblock.c</FilePath>
+            </File>
+            <File>
+              <FileName>TLSF_calloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\TLSF_calloc.c</FilePath>
+            </File>
+            <File>
+              <FileName>TLSF_debug_functions.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\TLSF_debug_functions.c</FilePath>
+            </File>
+            <File>
+              <FileName>TLSF_destructor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\TLSF_destructor.c</FilePath>
+            </File>
+            <File>
+              <FileName>TLSF_free.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\TLSF_free.c</FilePath>
+            </File>
+            <File>
+              <FileName>TLSF_initialisation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\TLSF_initialisation.c</FilePath>
+            </File>
+            <File>
+              <FileName>TLSF_malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\TLSF_malloc.c</FilePath>
+            </File>
+            <File>
+              <FileName>TLSF_realloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\dynmem-1.4\src\TLSF_realloc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>BSP</GroupName>
           <Files>
             <File>
@@ -722,6 +772,13 @@
         </Group>
         <Group>
           <GroupName>LEDLib</GroupName>
+          <Files>
+            <File>
+              <FileName>frame.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\frame.cpp</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

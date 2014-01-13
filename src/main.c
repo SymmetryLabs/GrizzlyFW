@@ -58,11 +58,6 @@ int main(void)
      */
 	debugInitialize();
 	
-	/*
-	debugPostMessage(DBG_INFO, DBG_INIT, 0xDEAD);
-	debugPostMessage(DBG_INFO, DBG_INIT, 0xBEEF);
-	*/
-	
 	sysConfigDebug(1);
 	sysConfigSysTick();
 	sysConfigRCC();

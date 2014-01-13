@@ -117,6 +117,10 @@ void udp_colorserver_receive_callback(void *arg, struct udp_pcb *upcb, struct pb
 		channel_num = rgbGetPBufChannelNum(p);
 		frame = rgbFramePtr;
 		
+		if (frame->start_time == 0)
+		{
+			frame->start_time = LocalTime;
+		}
 		frame->channels[channel_num] = p;
 		
 		/*
