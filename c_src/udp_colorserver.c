@@ -96,18 +96,11 @@ void udp_colorserver_init(void)
   */
 void udp_colorserver_receive_callback(void *arg, struct udp_pcb *upcb, struct pbuf *p, struct ip_addr *addr, u16_t port)
 {
-	uint32_t i;
 	uint32_t frame_num;
 	uint32_t channel_num;
 
-	uint8_t *src;
-	volatile uint8_t *dest;
-
 	ColorFrame* frame;
-	OSCMessage* ptr;
-	
-	RECEIVED_PACKET();
-	
+
 	/* free the UDP connection, so we can accept new clients */
 	udp_disconnect(upcb);
 	
@@ -115,35 +108,20 @@ void udp_colorserver_receive_callback(void *arg, struct udp_pcb *upcb, struct pb
 	if (src != 0) {
 		frame_num = rgbGetPBufFrameNum(p);
 		channel_num = rgbGetPBufChannelNum(p);
-		frame = rgbFramePtr;
+		frame = rgbFramePtr->next;
 		
 		if (frame->start_time == 0)
 		{
 			frame->start_time = LocalTime;
 		}
 		frame->channels[channel_num] = p;
-		
-		/*
-		CODE REPLACED BY ABOVE PBUF PTR SAVING CODE!
-		PBUF_FREE NOT CALLED BELOW
-		
-		dest = frame->buffer;
-		dest += channel_num * LEDS_PER_CHANNEL * RGB_FRAME_BPP;	
-		for (i = 0; i < LEDS_PER_CHANNEL; i++) {
-			*(dest) = *(src + 1);
-			*(dest + 1) = *(src + 2);
-			*(dest + 2) = *(src + 3);
-			dest += RGB_FRAME_BPP;
-			src += ETH_FRAME_BPP;
-		}
-		*/
-	} else {
-		pbuf_free(p);
-		DROPPED_PACKET();
+    pbuf_ref(p);
+    frame->channel_offset[channel_num] = 0;
+    frame->flags |= 1 << channel_num;
 	}
-	
+
 	/* Free the p buffer */
- 	/* pbuf_free(p); */
+ 	pbuf_free(p);
 	/* WILL FREE PBUFS AFTER INTERPOLATION! */
 }
 
