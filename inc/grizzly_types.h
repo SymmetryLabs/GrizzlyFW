@@ -1,6 +1,10 @@
 #ifndef HEADER_GRIZZLY_TYPES
 #define HEADER_GRIZZLY_TYPES
 
+#include <memory>
+#include <unordered_map>
+#include <map>
+
 namespace GrizzlyLib
 {
   typedef std::shared_ptr<void> UncastPtr;
@@ -16,12 +20,14 @@ namespace GrizzlyLib
   struct ObjectPtr {
             ObjectId id;
             ObjectType type;
-            std::shared_ptr<void> mem_ptr;
-            std::shared_ptr<void> obj_ptr;
+            UncastPtr mem_ptr;
+            UncastPtr obj_ptr;
+						
+						ObjectPtr(ObjectId id_, ObjectType type_, UncastPtr mem_ptr_, UncastPtr obj_ptr_) : id(id_), type(type_), mem_ptr(mem_ptr_), obj_ptr(obj_ptr_) {} ;
     };
 
-  typedef std::unordered_map<ObjectId, ObjectPtr> ObjectPtrMap;
-  typedef std::unordered_map<ChannelId , std::unordered_map<std::string, ObjectId> > PendingBufferMap;
+  typedef std::unordered_map<ObjectId, std::shared_ptr<ObjectPtr> > ObjectPtrMap;
+  typedef std::unordered_map<ChannelId , std::pair<std::string, ObjectId> > PendingBufferMap;
 
   template< class sElementFormat >
   class ElementBuffer;

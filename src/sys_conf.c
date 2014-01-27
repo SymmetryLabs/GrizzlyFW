@@ -35,10 +35,11 @@
 #include <sys/time.h>
 #include <sys/times.h>
 
+#include "stm32f4xx.h"
+#include "main.h"
 
-extern "C" {
   /* Global C variables */
-  __IO uint32_t LocalTime = 0; /* this variable is used to create a time reference incremented by 1ms */
+  volatile uint32_t LocalTime = 0; /* this variable is used to create a time reference incremented by 1ms */
   uint32_t timingdelay;
 
   /**
@@ -230,5 +231,4 @@ int _execve(char *name, char **argv, char **env)
 {
         errno = ENOMEM;
         return -1;
-}
 }

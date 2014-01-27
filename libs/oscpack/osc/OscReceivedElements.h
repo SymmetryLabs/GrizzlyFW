@@ -125,14 +125,14 @@ private:
         assert( sizeof(osc::int64) == 8 );
         assert( sizeof(osc::uint64) == 8 );
 
-        if( !IsValidElementSizeValue(size) )
+        /*if( !IsValidElementSizeValue(size) )
             throw MalformedPacketException( "invalid packet size" );
 
         if( size == 0 )
             throw MalformedPacketException( "zero length elements not permitted" );
 
         if( !IsMultipleOf4(size) )
-            throw MalformedPacketException( "element size must be multiple of four" );
+            throw MalformedPacketException( "element size must be multiple of four" ); */
 
         return size;
     }
@@ -332,145 +332,6 @@ inline bool operator!=(const ReceivedMessageArgumentIterator& lhs,
 	return !( lhs == rhs );
 }
 
-
-class ReceivedMessageArgumentStream{
-    friend class ReceivedMessage;
-    ReceivedMessageArgumentStream( const ReceivedMessageArgumentIterator& begin,
-            const ReceivedMessageArgumentIterator& end )
-        : p_( begin )
-        , end_( end ) {}
-
-    ReceivedMessageArgumentIterator p_, end_;
-    
-public:
-
-    // end of stream
-    bool Eos() const { return p_ == end_; }
-
-    ReceivedMessageArgumentStream& operator>>( bool& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs = (*p_++).AsBool();
-        return *this;
-    }
-
-    // not sure if it would be useful to stream Nil and Infinitum
-    // for now it's not possible
-    // same goes for array boundaries
-
-    ReceivedMessageArgumentStream& operator>>( int32& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs = (*p_++).AsInt32();
-        return *this;
-    }     
-
-    ReceivedMessageArgumentStream& operator>>( float& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs = (*p_++).AsFloat();
-        return *this;
-    }
-
-    ReceivedMessageArgumentStream& operator>>( char& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs = (*p_++).AsChar();
-        return *this;
-    }
-
-    ReceivedMessageArgumentStream& operator>>( RgbaColor& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs.value = (*p_++).AsRgbaColor();
-        return *this;
-    }
-
-    ReceivedMessageArgumentStream& operator>>( MidiMessage& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs.value = (*p_++).AsMidiMessage();
-        return *this;
-    }
-
-    ReceivedMessageArgumentStream& operator>>( int64& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs = (*p_++).AsInt64();
-        return *this;
-    }
-    
-    ReceivedMessageArgumentStream& operator>>( TimeTag& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs.value = (*p_++).AsTimeTag();
-        return *this;
-    }
-
-    ReceivedMessageArgumentStream& operator>>( double& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs = (*p_++).AsDouble();
-        return *this;
-    }
-
-    ReceivedMessageArgumentStream& operator>>( Blob& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        (*p_++).AsBlob( rhs.data, rhs.size );
-        return *this;
-    }
-    
-    ReceivedMessageArgumentStream& operator>>( const char*& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs = (*p_++).AsString();
-        return *this;
-    }
-    
-    ReceivedMessageArgumentStream& operator>>( Symbol& rhs )
-    {
-        if( Eos() )
-            throw MissingArgumentException();
-
-        rhs.value = (*p_++).AsSymbol();
-        return *this;
-    }
-
-    ReceivedMessageArgumentStream& operator>>( MessageTerminator& rhs )
-    {
-        (void) rhs; // suppress unused parameter warning
-
-        if( !Eos() )
-            throw ExcessArgumentException();
-
-        return *this;
-    }
-};
-
-
 class ReceivedMessage{
     void Init( const char *bundle, osc_bundle_element_size_t size );
 public:
@@ -500,10 +361,6 @@ public:
         return ReceivedMessageArgumentIterator( typeTagsEnd_, 0 );
     }
 
-    ReceivedMessageArgumentStream ArgumentStream() const
-    {
-        return ReceivedMessageArgumentStream( ArgumentsBegin(), ArgumentsEnd() );
-    }
 
 private:
 	const char *addressPattern_;

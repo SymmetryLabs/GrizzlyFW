@@ -36,7 +36,8 @@ extern "C" {
 
 #include <string.h>
 #include <stdio.h>
-#include "grizzlylib.h"
+#include "grizzly_types.h"
+#include "grizzly_buffers.h"
 #include "grizzlyapp.h"
 #include "OscReceivedElements.h"
 
@@ -156,14 +157,14 @@ void udp_colorserver_init(GrizzlyApp* app)
 			uint32_t total_size = (arg++)->AsInt32();
 			const void* data;
 			osc::osc_bundle_element_size_t data_size;
-			arg->AsBlob(data, data_size);
+			(arg++)->AsInt32Unchecked();
 			for (int i = 0; i < num_channels; i++)
 			{
 				if (std::strcmp(ch_type[i], "argb") == 0)
 				{
 					pbuf_ref(p);
-					ObjectId objid = BufferFactory<ARGBFormat>::allocateBuffer(app->objman, std::shared_ptr<pbuf>(p, pbuf_free), arg+1, arg+100);
-					pushPendingBuffer(ch_num, objid);
+					ObjectId obj_id = BufferFactory<ARGBFormat>::allocateBuffer(app->objman, std::shared_ptr<pbuf>(p, pbuf_free), &*(arg), &*(arg) + ch_offset[i]*sizeof(ARGBFormat));
+					app->objman->pushPendingBuffer(ch_num[i], obj_id, "argb");
 
 					/*
 					auto buf = app->objman->allocateBuffer<RGBFormat>(ch_size[i]);

@@ -260,17 +260,17 @@
             </OnChipMemories>
           </ArmMisc>
           <Carm>
-            <arpcs>0</arpcs>
+            <arpcs>1</arpcs>
             <stkchk>0</stkchk>
             <reentr>0</reentr>
             <interw>0</interw>
             <bigend>0</bigend>
             <Strict>0</Strict>
-            <Optim>0</Optim>
+            <Optim>4</Optim>
             <wLevel>2</wLevel>
             <uThumb>1</uThumb>
             <VariousControls>
-              <MiscControls>-std=c++11</MiscControls>
+              <MiscControls>-fno-exceptions</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40XX</Define>
               <Undefine></Undefine>
               <IncludePath>..\inc;..\libs\CMSIS\Include;..\libs\CMSIS\Device\ST\STM32F4xx\Include;..\libs\STM32F4xx_StdPeriph_Driver\inc;..\libs\STM32F4x7_ETH_Driver\inc;..\libs\GrizzlyBSP\inc;..\libs\lwip-1.4.1\src\include;..\libs\lwip-1.4.1\src\include\lwip;..\libs\lwip-1.4.1\src\include\netif;..\libs\lwip-1.4.1\src\include\ipv4;..\libs\lwip-1.4.1\port\STM32F4x7;..\libs\lwip-1.4.1\port\STM32F4x7\Standalone;..\libs\bget;..\libs\oscpack\osc</IncludePath>
@@ -570,11 +570,85 @@
               <FileName>OscReceivedElements.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\libs\oscpack\osc\OscReceivedElements.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArm>
+                  <Carm>
+                    <arpcs>2</arpcs>
+                    <stkchk>2</stkchk>
+                    <reentr>2</reentr>
+                    <interw>2</interw>
+                    <bigend>2</bigend>
+                    <Strict>0</Strict>
+                    <Optim>4</Optim>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <VariousControls>
+                      <MiscControls>-fexceptions -std=c++11</MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Carm>
+                </FileArm>
+              </FileOption>
             </File>
             <File>
               <FileName>OscTypes.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\libs\oscpack\osc\OscTypes.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArm>
+                  <Carm>
+                    <arpcs>2</arpcs>
+                    <stkchk>2</stkchk>
+                    <reentr>2</reentr>
+                    <interw>2</interw>
+                    <bigend>2</bigend>
+                    <Strict>0</Strict>
+                    <Optim>0</Optim>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <VariousControls>
+                      <MiscControls>-std=c++11</MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Carm>
+                </FileArm>
+              </FileOption>
             </File>
           </Files>
         </Group>
@@ -595,9 +669,9 @@
               <FilePath>..\src\buffs_iram2.c</FilePath>
             </File>
             <File>
-              <FileName>syscalls.c</FileName>
+              <FileName>sys_conf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\syscalls.c</FilePath>
+              <FilePath>..\src\sys_conf.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -605,24 +679,177 @@
           <GroupName>main</GroupName>
           <Files>
             <File>
-              <FileName>main.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\src\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>grizzlyapp.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\src\grizzlyapp.cpp</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\stm32f4xx_it.c</FilePath>
             </File>
             <File>
+              <FileName>grizzlysys.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\grizzlysys.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArm>
+                  <Carm>
+                    <arpcs>2</arpcs>
+                    <stkchk>2</stkchk>
+                    <reentr>2</reentr>
+                    <interw>2</interw>
+                    <bigend>2</bigend>
+                    <Strict>0</Strict>
+                    <Optim>0</Optim>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <VariousControls>
+                      <MiscControls>-std=c++11</MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Carm>
+                </FileArm>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>grizzlyapp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\grizzlyapp.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArm>
+                  <Carm>
+                    <arpcs>2</arpcs>
+                    <stkchk>2</stkchk>
+                    <reentr>2</reentr>
+                    <interw>2</interw>
+                    <bigend>2</bigend>
+                    <Strict>0</Strict>
+                    <Optim>0</Optim>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <VariousControls>
+                      <MiscControls>-std=c++11</MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Carm>
+                </FileArm>
+              </FileOption>
+            </File>
+            <File>
               <FileName>udp_color_server.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\src\udp_color_server.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArm>
+                  <Carm>
+                    <arpcs>2</arpcs>
+                    <stkchk>2</stkchk>
+                    <reentr>2</reentr>
+                    <interw>2</interw>
+                    <bigend>2</bigend>
+                    <Strict>0</Strict>
+                    <Optim>0</Optim>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <VariousControls>
+                      <MiscControls>-std=c++11</MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Carm>
+                </FileArm>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\main.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>2</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArm>
+                  <Carm>
+                    <arpcs>2</arpcs>
+                    <stkchk>2</stkchk>
+                    <reentr>2</reentr>
+                    <interw>2</interw>
+                    <bigend>2</bigend>
+                    <Strict>0</Strict>
+                    <Optim>0</Optim>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <VariousControls>
+                      <MiscControls>-std=c++11</MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Carm>
+                </FileArm>
+              </FileOption>
             </File>
           </Files>
         </Group>

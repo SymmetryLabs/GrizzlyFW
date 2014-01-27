@@ -2,7 +2,9 @@
 #define HEADER_COLOR_FORMATS
 
 #include <string>
+#include <vector>
 #include "grizzly_types.h"
+#include "grizzly_manager.h"
 
 namespace GrizzlyLib
 {
@@ -12,7 +14,7 @@ namespace GrizzlyLib
   public:
     typedef sElementFormat* iterator;
     typedef const sElementFormat* const_iterator;
-    typedef SharedBufferPtr<ElementBuffer, sElementFormat> BufferPtr;
+    typedef SharedBufferPtr<sElementFormat> BufferPtr;
 
   private:
     iterator first;
@@ -61,16 +63,14 @@ namespace GrizzlyLib
   template< class sFormat >
   struct BufferFactory
   {
-    template<class sFormat>
-    static ObjectId allocateBuffer(ObjectManager* objman, UncastPtr block_ptr, void* start, void* finish)
+    static ObjectId allocateBuffer(ObjectManager* objman, UncastPtr block_ptr, const void* start, const void* finish)
     {
-      auto start_ptr = std::static_pointer_cast< ElementBuffer<sFormat>::iterator >(start);
-      auto finish_ptr = std::static_pointer_cast< ElementBuffer<sFormat>::iterator >(finish);
+      auto start_ptr = (typename ElementBuffer<sFormat>::iterator) (start);
+      auto finish_ptr = (typename ElementBuffer<sFormat>::iterator) (finish);
       auto obj_ptr = std::make_shared< ElementBuffer<sFormat> >(start_ptr, finish_ptr);
-      return objman->allocateObject(ElementBuffer<sFormat>::bufferType, block_ptr, obj_ptr);
+      return objman->allocateObject(ElementBuffer<sFormat>::bufferType(), block_ptr, obj_ptr);
     }
 
-    template<class sFormat>
     static ObjectId allocateBuffer(ObjectManager* objman, uint32_t size)
     {
         auto block_ptr = std::make_shared< std::vector<sFormat> >(size);
@@ -78,7 +78,6 @@ namespace GrizzlyLib
         return objman->allocateObject(ElementBuffer<sFormat>::bufferType(), block_ptr, obj_ptr);
     }
 
-    template<class sFormat>
     static BufferPtr<sFormat> getBuffer(ObjectManager* objman, ObjectId obj_id)
     {
         auto obj_ptr = objman->getObject(obj_id, ElementBuffer<sFormat>::bufferType());

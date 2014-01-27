@@ -1,3 +1,7 @@
+#include "main.h"
+#include "legacy.h"
+#include "grizzlyapp.h"
+
 void GrizzlyApp::sysConfigRCC() 
 {
     /* Enable SYSCFG clock */

@@ -1,9 +1,12 @@
 #ifndef HEADER_GRIZZLYLIB
 #define HEADER_GRIZZLYLIB
 
+#include <cstring>
+#include <tuple>
 #include "grizzly_types.h"
 
-namespace GrizzyLib {
+
+namespace GrizzlyLib {
   class FrameGroup {
   private:
       /* buffers[ChannelId][ObjectType] = ObjectId */
@@ -17,16 +20,10 @@ namespace GrizzyLib {
           auto iter = buffers.find(ch_id);
           if (iter == buffers.end())
               return 0;
-          auto iter2 = iter->second.find(obj_type);
-          if (iter2 == iter->second.end())
+          if ( iter->second.first != obj_type);
               return 0;
-          return iter2->second;
+          return iter->second.second;
       };
-
-      ObjectId getChannelObjectId(ChannelId ch_id, ObjectType obj_type)
-      {
-          return getChannelObjectId(ch_id, obj_type);
-      }
 
       inline bool hasChannelObject(ChannelId ch_id)
       {
@@ -37,14 +34,14 @@ namespace GrizzyLib {
       {
           if (!hasChannelObject(ch_id))
               return false;
-          return !( buffers[ch_id].find(obj_type) == buffers[ch_id].end() );
+          return ( buffers[ch_id].first == obj_type );
       }
 
       void addChannelObject(ChannelId ch_id, ObjectType obj_type, ObjectId obj_id)
       {
           if (hasChannelObject(ch_id, obj_type))
               return;
-          buffers[ch_id][obj_type] = obj_id;
+          buffers[ch_id] = std::pair<ObjectType, ObjectId>(obj_type, obj_id);
       }
 
       template<class sFormat>
@@ -67,10 +64,8 @@ namespace GrizzyLib {
       uint32_t allocateObject(ObjectType obj_type, UncastPtr block_ptr, UncastPtr obj_ptr)
       {
           num_objects++;
-          objects.emplace(num_objects, ObjectPtr{ num_objects, \
-                                                  obj_type, \
-                                                  block_ptr, \
-                                                  obj_ptr });
+					auto struct_ptr = std::make_shared<ObjectPtr>(num_objects, obj_type, block_ptr, obj_ptr);
+          objects.insert(std::make_pair(num_objects, struct_ptr));
           
           return num_objects;
       }
@@ -80,9 +75,9 @@ namespace GrizzyLib {
           auto iter = objects.find(obj_id);
           if (iter == objects.end())
               return 0;
-          if (obj_type != iter->second.type)
+          if (obj_type != iter->second->type)
               return 0;
-          return iter->second.obj_ptr;
+          return iter->second->obj_ptr;
       }
 
       void releaseObject(ObjectId obj_id)
@@ -90,10 +85,10 @@ namespace GrizzyLib {
           auto obj = objects.find(obj_id);
           if (obj == objects.end())
               return;
-          if (obj->second.mem_ptr != 0)
-              obj->second.mem_ptr.reset();
-          if (obj->second.obj_ptr != 0)
-              obj->second.obj_ptr.reset();
+          if (obj->second->mem_ptr != 0)
+              obj->second->mem_ptr.reset();
+          if (obj->second->obj_ptr != 0)
+              obj->second->obj_ptr.reset();
           objects.erase(obj);
       }
 
@@ -117,17 +112,15 @@ namespace GrizzyLib {
               return;
           for ( auto it = obj_ptr->buffers.begin(); it != obj_ptr->buffers.end(); ++it )
           {
-              for ( auto ite = it->second.begin(); ite != it->second.end(); ++ite )
-              {
-                  releaseObject(ite->second);
-              }
+						releaseObject(it->second.second);
           }
           releaseObject(obj_id);
       }
 
-      void pushPendingBuffer(ChannelId ch_id, ObjectId obj_id)
+      void pushPendingBuffer(ChannelId ch_id, ObjectId obj_id, ObjectType obj_type)
       {
-          pending_buffers[ch_id] = obj_id;
+				pending_buffers.emplace(ch_id, std::pair<std::string, ObjectId>(obj_type, obj_id));
+        // pending_buffers[ch_id] = obj_id;
       }
 
       /*

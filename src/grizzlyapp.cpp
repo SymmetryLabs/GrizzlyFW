@@ -1,9 +1,10 @@
-#include "grizzlylib.h"
 #include "grizzlyapp.h"
 
 extern "C" {
 	#include "main.h"
 	#include "stm32f4xx.h"
+	#include "stm32f4x7_eth.h"
+	#include "netconf.h"
 	#include "legacy.h"
 }
 

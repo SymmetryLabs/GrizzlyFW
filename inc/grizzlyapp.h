@@ -6,6 +6,8 @@ extern "C" {
 
 #include "grizzly_types.h"
 
+using namespace GrizzlyLib;
+
 class GrizzlyApp {
 private:
 	/* LocalTime when current receiving frame's first packet arrived */
@@ -26,7 +28,7 @@ public:
 	//GrizzlyApp();
 	//~GrizzlyApp();
 	
-	GrizzyLib::ObjectManager* objman;
+	ObjectManager* objman;
 	void initialize();
 
 	void sysConfigRCC();
