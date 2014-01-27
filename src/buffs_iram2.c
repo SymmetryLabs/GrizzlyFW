@@ -1,6 +1,6 @@
 
 
-char bpool_buffer[60000];
+char bpool_buffer[64000]  __attribute__ ((section (".ccmram")));
 #include "stm32f4xx.h"
 
 const uint32_t interleaveLUT1[256] = { \
