@@ -6,7 +6,6 @@ extern "C" {
 	#include "netconf.h"
 } /* End extern C */
 
-#include "grizzlylib.h"
 #include "grizzlyapp.h"
 
 extern void udp_colorserver_init(GrizzlyApp*);

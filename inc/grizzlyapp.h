@@ -19,6 +19,8 @@ private:
 	FramePtr last_frame;
 	/* Pointer to current FrameGroup being interpolated/sent */
 	FramePtr current_frame;
+
+	uint16_t uhTimerPrescaler = 0;
 	
 public:
 	//GrizzlyApp();
