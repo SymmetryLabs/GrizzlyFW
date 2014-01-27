@@ -8,8 +8,8 @@
   <Targets>
     <Target>
       <TargetName>GrizzlyBoard</TargetName>
-      <ToolsetNumber>0x4</ToolsetNumber>
-      <ToolsetName>ARM-ADS</ToolsetName>
+      <ToolsetNumber>0x3</ToolsetNumber>
+      <ToolsetName>ARM-GNU</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F407ZE</Device>
@@ -44,14 +44,14 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\</OutputDirectory>
+          <OutputDirectory>..\build\obj\</OutputDirectory>
           <OutputName>grizzlycpp</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
-          <ListingPath>.\</ListingPath>
+          <BrowseInformation>0</BrowseInformation>
+          <ListingPath>..\build\lst\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -176,9 +176,9 @@
           <pFcArmRoot></pFcArmRoot>
           <FcArmLst>0</FcArmLst>
         </Utilities>
-        <TargetArmAds>
-          <ArmAdsMisc>
-            <GenerateListings>0</GenerateListings>
+        <TargetArm>
+          <ArmMisc>
+            <asLst>1</asLst>
             <asHll>1</asHll>
             <asAsm>1</asAsm>
             <asMacX>1</asMacX>
@@ -186,27 +186,11 @@
             <asFals>1</asFals>
             <asDbgD>1</asDbgD>
             <asForm>1</asForm>
-            <ldLst>0</ldLst>
+            <ldLst>1</ldLst>
             <ldmm>1</ldmm>
             <ldXref>1</ldXref>
             <BigEnd>0</BigEnd>
-            <AdsALst>1</AdsALst>
-            <AdsACrf>1</AdsACrf>
-            <AdsANop>0</AdsANop>
-            <AdsANot>0</AdsANot>
-            <AdsLLst>1</AdsLLst>
-            <AdsLmap>1</AdsLmap>
-            <AdsLcgr>1</AdsLcgr>
-            <AdsLsym>1</AdsLsym>
-            <AdsLszi>1</AdsLszi>
-            <AdsLtoi>1</AdsLtoi>
-            <AdsLsun>1</AdsLsun>
-            <AdsLven>1</AdsLven>
-            <AdsLsxf>1</AdsLsxf>
-            <RvctClst>0</RvctClst>
-            <GenPPlst>0</GenPPlst>
-            <AdsCpuType>"Cortex-M4"</AdsCpuType>
-            <RvctDeviceName></RvctDeviceName>
+            <GCPUTYP>"Cortex-M4"</GCPUTYP>
             <mOS>0</mOS>
             <uocRom>0</uocRom>
             <uocRam>0</uocRam>
@@ -217,29 +201,6 @@
             <RvdsVP>2</RvdsVP>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
-            <StupSel>8</StupSel>
-            <useUlib>1</useUlib>
-            <EndSel>0</EndSel>
-            <uLtcg>0</uLtcg>
-            <RoSelD>3</RoSelD>
-            <RwSelD>3</RwSelD>
-            <CodeSel>0</CodeSel>
-            <OptFeed>0</OptFeed>
-            <NoZi1>0</NoZi1>
-            <NoZi2>0</NoZi2>
-            <NoZi3>0</NoZi3>
-            <NoZi4>0</NoZi4>
-            <NoZi5>0</NoZi5>
-            <Ro1Chk>0</Ro1Chk>
-            <Ro2Chk>0</Ro2Chk>
-            <Ro3Chk>0</Ro3Chk>
-            <Ir1Chk>1</Ir1Chk>
-            <Ir2Chk>0</Ir2Chk>
-            <Ra1Chk>0</Ra1Chk>
-            <Ra2Chk>0</Ra2Chk>
-            <Ra3Chk>0</Ra3Chk>
-            <Im1Chk>1</Im1Chk>
-            <Im2Chk>1</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -286,113 +247,60 @@
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </XRAM>
-              <OCR_RVCT1>
-                <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT1>
-              <OCR_RVCT2>
-                <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT2>
-              <OCR_RVCT3>
-                <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT3>
-              <OCR_RVCT4>
-                <Type>1</Type>
-                <StartAddress>0x8000000</StartAddress>
-                <Size>0x80000</Size>
-              </OCR_RVCT4>
-              <OCR_RVCT5>
-                <Type>1</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT5>
-              <OCR_RVCT6>
-                <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT6>
-              <OCR_RVCT7>
-                <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT7>
-              <OCR_RVCT8>
-                <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
-              </OCR_RVCT8>
-              <OCR_RVCT9>
-                <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x20000</Size>
-              </OCR_RVCT9>
-              <OCR_RVCT10>
+              <IRAM2>
                 <Type>0</Type>
                 <StartAddress>0x10000000</StartAddress>
                 <Size>0x10000</Size>
-              </OCR_RVCT10>
+              </IRAM2>
+              <IROM2>
+                <Type>0</Type>
+                <StartAddress>0x0</StartAddress>
+                <Size>0x0</Size>
+              </IROM2>
             </OnChipMemories>
-            <RvctStartVector></RvctStartVector>
-          </ArmAdsMisc>
-          <Cads>
-            <interw>1</interw>
-            <Optim>1</Optim>
-            <oTime>0</oTime>
-            <SplitLS>0</SplitLS>
-            <OneElfS>0</OneElfS>
+          </ArmMisc>
+          <Carm>
+            <arpcs>0</arpcs>
+            <stkchk>0</stkchk>
+            <reentr>0</reentr>
+            <interw>0</interw>
+            <bigend>0</bigend>
             <Strict>0</Strict>
-            <EnumInt>0</EnumInt>
-            <PlainCh>0</PlainCh>
-            <Ropi>0</Ropi>
-            <Rwpi>0</Rwpi>
-            <wLevel>0</wLevel>
-            <uThumb>0</uThumb>
-            <uSurpInc>0</uSurpInc>
+            <Optim>0</Optim>
+            <wLevel>2</wLevel>
+            <uThumb>1</uThumb>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>-std=c++11</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40XX</Define>
               <Undefine></Undefine>
-              <IncludePath>..\inc;..\libs\CMSIS\Include;..\libs\CMSIS\Device\ST\STM32F4xx\Include;..\libs\STM32F4xx_StdPeriph_Driver\inc;..\libs\STM32F4x7_ETH_Driver\inc;..\libs\GrizzlyBSP\inc;..\libs\lwip-1.4.1\src\include;..\libs\lwip-1.4.1\src\include\lwip;..\libs\lwip-1.4.1\src\include\netif;..\libs\lwip-1.4.1\src\include\ipv4;..\libs\lwip-1.4.1\port\STM32F4x7;..\libs\lwip-1.4.1\port\STM32F4x7\Standalone</IncludePath>
+              <IncludePath>..\inc;..\libs\CMSIS\Include;..\libs\CMSIS\Device\ST\STM32F4xx\Include;..\libs\STM32F4xx_StdPeriph_Driver\inc;..\libs\STM32F4x7_ETH_Driver\inc;..\libs\GrizzlyBSP\inc;..\libs\lwip-1.4.1\src\include;..\libs\lwip-1.4.1\src\include\lwip;..\libs\lwip-1.4.1\src\include\netif;..\libs\lwip-1.4.1\src\include\ipv4;..\libs\lwip-1.4.1\port\STM32F4x7;..\libs\lwip-1.4.1\port\STM32F4x7\Standalone;..\libs\bget</IncludePath>
             </VariousControls>
-          </Cads>
-          <Aads>
-            <interw>1</interw>
-            <Ropi>0</Ropi>
-            <Rwpi>0</Rwpi>
-            <thumb>0</thumb>
-            <SplitLS>0</SplitLS>
-            <SwStkChk>0</SwStkChk>
-            <NoWarn>0</NoWarn>
-            <uSurpInc>0</uSurpInc>
+          </Carm>
+          <Aarm>
+            <bBE>0</bBE>
+            <interw>0</interw>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
-          </Aads>
-          <LDads>
+          </Aarm>
+          <LDarm>
             <umfTarg>1</umfTarg>
-            <Ropi>0</Ropi>
-            <Rwpi>0</Rwpi>
+            <enaGarb>0</enaGarb>
+            <noStart>0</noStart>
             <noStLib>0</noStLib>
-            <RepFail>1</RepFail>
-            <useFile>0</useFile>
-            <TextAddressRange>0x08000000</TextAddressRange>
-            <DataAddressRange>0x20000000</DataAddressRange>
-            <ScatterFile></ScatterFile>
+            <uMathLib>1</uMathLib>
+            <TextAddressRange></TextAddressRange>
+            <DataAddressRange></DataAddressRange>
+            <BSSAddressRange></BSSAddressRange>
             <IncludeLibs></IncludeLibs>
-            <IncludeLibsPath></IncludeLibsPath>
-            <Misc></Misc>
-            <LinkerInputFile></LinkerInputFile>
-            <DisabledWarnings></DisabledWarnings>
-          </LDads>
-        </TargetArmAds>
+            <IncludeDir></IncludeDir>
+            <Misc>-lstdc++</Misc>
+            <ScatterFile>..\linkscript.ld</ScatterFile>
+          </LDarm>
+        </TargetArm>
       </TargetOption>
       <Groups>
         <Group>
@@ -402,6 +310,16 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\libs\GrizzlyBSP\src\system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>bget</GroupName>
+          <Files>
+            <File>
+              <FileName>bget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libs\bget\bget.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -646,47 +564,43 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>OSC</GroupName>
+        </Group>
+        <Group>
+          <GroupName>GrizzlyLib</GroupName>
+        </Group>
+        <Group>
+          <GroupName>legacy</GroupName>
+          <Files>
+            <File>
+              <FileName>buffs_iram1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\buffs_iram1.c</FilePath>
+            </File>
+            <File>
+              <FileName>buffs_iram2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\buffs_iram2.c</FilePath>
+            </File>
+            <File>
+              <FileName>syscalls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\syscalls.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>main</GroupName>
           <Files>
             <File>
-              <FileName>dma_conf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\dma_conf.c</FilePath>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\main.cpp</FilePath>
             </File>
             <File>
-              <FileName>fifobufs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\fifobufs.c</FilePath>
-            </File>
-            <File>
-              <FileName>fifobufs_iram1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\fifobufs_iram1.c</FilePath>
-            </File>
-            <File>
-              <FileName>fifobufs_iram2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\fifobufs_iram2.c</FilePath>
-            </File>
-            <File>
-              <FileName>frame_helpers.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\frame_helpers.c</FilePath>
-            </File>
-            <File>
-              <FileName>gpio_conf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\gpio_conf.c</FilePath>
-            </File>
-            <File>
-              <FileName>interleave_lut.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\interleave_lut.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main.c</FilePath>
+              <FileName>grizzlyapp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\grizzlyapp.cpp</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_it.c</FileName>
@@ -694,29 +608,9 @@
               <FilePath>..\src\stm32f4xx_it.c</FilePath>
             </File>
             <File>
-              <FileName>sys_conf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sys_conf.c</FilePath>
-            </File>
-            <File>
-              <FileName>udp_colorserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\udp_colorserver.c</FilePath>
-            </File>
-            <File>
-              <FileName>udp_debugclient.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\udp_debugclient.c</FilePath>
-            </File>
-            <File>
-              <FileName>udp_echoserver.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\udp_echoserver.c</FilePath>
-            </File>
-            <File>
-              <FileName>workers.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\workers.c</FilePath>
+              <FileName>udp_color_server.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\src\udp_color_server.cpp</FilePath>
             </File>
           </Files>
         </Group>

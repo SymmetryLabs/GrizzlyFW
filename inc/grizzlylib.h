@@ -1,20 +1,23 @@
 #ifndef HEADER_GRIZZLYLIB
 #define HEADER_GRIZZLYLIB
 
-#include <memory>
-#include <cassert>
-#include <iostream>
-#include <cmath>
-#include <unordered_map>
-#include <vector>
+extern "C" {
+	#include "stm32f4xx.h"
+}
 #include <queue>
 #include <map>
 
-namespace GrizzyLib {
-  using std::cout;
-  using std::endl;
+#include <memory>
+//#include <cassert>
+//#include <iostream>
+#include <cmath>
+#include <vector>
+#include <unordered_map>
 
-  template< template <typename> class sObject, class sSubObject>
+
+namespace GrizzyLib {
+  
+  template< template <typename> class sObject, class sSubObject >
   using SharedBufferPtr = std::shared_ptr< sObject<sSubObject> >;
 
   template< template <typename, typename> class sObject, class sSubObject1, class sSubObject2>
@@ -40,7 +43,7 @@ namespace GrizzyLib {
     iterator last;
 
   public:
-    static inline const std::string& bufferType();
+    static const std::string& bufferType();
 
     iterator begin() { return first; }
     iterator end() { return last; }
@@ -141,12 +144,12 @@ namespace GrizzyLib {
 
     ElementConverter()
     {
-      cout << "ElementConverter constructed" << endl;
+      // cout << "ElementConverter constructed" << endl;
     }
 
     ~ElementConverter()
     {
-      cout << "ElementConverter destructed" << endl;
+      // cout << "ElementConverter destructed" << endl;
     }
   };
 
@@ -234,22 +237,90 @@ namespace GrizzyLib {
 
     ElementInterpolator()
     {
-      cout << "ElementInterpolator constructed" << endl;
+      // cout << "ElementInterpolator constructed" << endl;
     };
 
     ~ElementInterpolator()
     {
-      cout << "ElementInterpolator destructed" << endl;
+      // cout << "ElementInterpolator destructed" << endl;
     };
   };
+	
+	struct ARGBFormat
+	{
+		uint8_t A;
+		uint8_t R;
+		uint8_t G;
+		uint8_t B;
+	};
 
-  #include "helpers.hpp"
+	struct RGBFormat
+	{
+		uint8_t R;
+		uint8_t G;
+		uint8_t B;
+	};
+
+	struct XYZFormat
+	{
+		float X;
+		float Y;
+		float Z;
+	};
+
+	struct SlowXYZFormat : XYZFormat {};
+
+	struct DMAFormat
+	{
+		uint32_t R[4];
+		uint32_t G[4];
+		uint32_t B[4];
+	};
+
+	struct SlowDMAFormat {
+		uint16_t R[8];
+		uint16_t G[8];
+		uint16_t B[8];
+	};
+	#define elementBufferT(_format) ElementBuffer<_format>
+#define elementBufferF(_function, _format) elementBufferT(_format)::_function
+#define def_bufferType(_format) template<> const std::string&  elementBufferF(bufferType, _format)
+
+/* ElementConverter template function implementation macros */
+#define elementConverterT(_src_format, _dest_format) ElementConverter<_src_format, _dest_format>
+#define elementConverterF(_function, _src_format, _dest_format) elementConverterT(_src_format, _dest_format)::_function
+#define def_convertElement(_src_format, _dest_format) template<> inline void elementConverterF(convertElement, _src_format, _dest_format)
+#define def_convertElements(_src_format, _dest_format) template<> void elementConverterF(convertElements, _src_format, _dest_format)
+#define def_converterType(_src_format, _dest_format) template<> inline const std::string& elementConverterF(converterType, _src_format, _dest_format)
+
+/* ElementInterpolator template function implementation macros */
+#define elementInterpolatorT(_src1_format, _src2_format, _dest_format) ElementInterpolator<_src1_format, _src2_format, _dest_format>
+#define elementInterpolatorF(_function, _src1_format, _src2_format, _dest_format) elementInterpolatorT(_src1_format, _src2_format, _dest_format)::_function
+#define def_interpolateElement(_src1_format, _src2_format, _dest_format) template<> inline void elementInterpolatorF(interpolateElement, _src1_format, _src2_format, _dest_format)
+#define def_interpolateElements(_src1_format, _src2_format, _dest_format) template<> void elementInterpolatorF(interpolateElements, _src1_format, _src2_format, _dest_format)
+#define def_interpolatorType(_src1_format, _src2_format, _dest_format) template<> inline const std::string& elementInterpolatorF(interpolatorType, _src1_format, _src2_format, _dest_format)
+
+const std::string ts_argb = std::string("argb");
+const std::string ts_rgb = std::string("rgb");
+const std::string ts_xyz = std::string("xyz");
+const std::string ts_s_xyz = std::string("s_xyz");
+const std::string ts_dma = std::string("dma");
+const std::string ts_s_dma = std::string("s_dma");
+def_bufferType(ARGBFormat)()  { return ts_argb; }
+def_bufferType(RGBFormat)() { return ts_rgb; }
+def_bufferType(XYZFormat)() { return ts_xyz; }
+def_bufferType(SlowXYZFormat)() { return ts_s_xyz; }
+def_bufferType(DMAFormat)() { return ts_dma; }
+def_bufferType(SlowDMAFormat)() { return ts_s_dma; }
+
+
+  
   #include "color_formats.hpp"
   #include "color_converters.hpp"
   #include "color_interpolators.hpp"
 
   #include "frame_queue.hpp"
   #include "obj_manager.hpp"
-}
+};
 
 #endif /* HEADER_GRIZZLYLIB */

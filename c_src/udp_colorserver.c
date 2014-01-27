@@ -32,8 +32,6 @@
 #include "lwip/tcp.h"
 #include <string.h>
 #include <stdio.h>
-#include "grizzly.h"
-#include "fifobufs_macros.h"
 
 /* Private typedef -----------------------------------------------------------*/
 

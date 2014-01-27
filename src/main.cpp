@@ -1,17 +1,13 @@
 extern "C" {
-  #include "stm32f4xx.h"
+ 
   #include "main.h"
   #include "bget.h"
+	#include "grizzlyapp.h"
+	#include "stm32f4x7_eth.h"
+	#include "netconf.h"
+//	#include "udp_color_server.h"
 
-  void *malloc(size_t size) 
-  {
-    return bget(size);
-  }
-
-  void free(void *pointer)
-  {
-    brel(pointer);
-  }
+	#define BOOST_EXCEPTION_DISABLE
 
   /* Somewhere in header file */
   #define SYSTEMTICK_PERIOD_MS  1
@@ -45,7 +41,8 @@ extern "C" {
   {
     LocalTime += SYSTEMTICK_PERIOD_MS;
   }
-
+	
+	
   #ifdef  USE_FULL_ASSERT
   /**
     * @brief  Reports the name of the source file and the source line number
@@ -63,7 +60,20 @@ extern "C" {
     while (1)
     {}
   }
+	#endif
+	
+	void *malloc(size_t size) 
+  {
+    return bget(size);
+  }
+
+  void free(void *pointer)
+  {
+    brel(pointer);
+  }
 } /* End extern C */
+
+#include "grizzlylib.h"
 
 GrizzlyApp *app;
 
@@ -78,15 +88,36 @@ int main()
 	app->sysConfigDebug(1);
 	app->sysConfigSysTick();
 	app->sysConfigRCC();
-  app->initializeGPIO();
+  app->gpioConfigEthernet();
+	app->gpioConfigLEDOutput();
+	
+	app->sysDisablePHY();
+	Delay(5);
+	app->sysEnablePHY();
+	
+	/* configure ethernet */ 
+  ETH_BSP_Config();
+
+  /* Initilaize the LwIP stack */
+  LwIP_Init();
+
+  /* UDP echoserver */
+//  udp_echoserver_init();
+
+	/* UDP Color Framebuffer server */
+	udp_colorserver_init();
 
   /* Initialize all ethernet functions, must be done from extern "C"! */
-  initializeLwIP();
+  // initializeLwIP();
 
 	while (1)
 	{
-		app->runReceivers();
+		/* check if any packet received */
+		if (ETH_CheckFrameReceived())
+		{
+			LwIP_Pkt_Handle();
+		}
+		LwIP_Periodic_Handle(LocalTime);
+		// app->runReceivers();
 	}
 }
-
-#endif

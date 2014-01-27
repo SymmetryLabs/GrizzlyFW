@@ -451,8 +451,12 @@
 extern char *sprintf();               /* Sun includes don't define sprintf */
 #endif
 
-#include <assert.h>
-#include <memory.h>
+#include "stm32f4xx.h"
+//#include <assert.h>
+//#include <memory.h>
+
+#define assert(x) assert_param(x)
+#include <string.h>
 
 #ifdef BufDump			      /* BufDump implies DumpData */
 #ifndef DumpData
@@ -1268,7 +1272,7 @@ int bpoolv(buf)
 extern long time();
 #endif
 
-extern char *malloc();
+extern void *malloc();
 extern int free _((char *));
 
 static char *bchain = NULL;	      /* Our private buffer chain */
@@ -1440,7 +1444,7 @@ static bufsize blimit(bs)
     return bs;
 }
 
-int main()
+int main_mem_test()
 {
     int i;
     double x;

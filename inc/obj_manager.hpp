@@ -76,7 +76,7 @@ public:
                                               obj_type, \
                                               block_ptr, \
                                               obj_ptr });
-      cout << " === Object #" << num_objects << " allocated === " << endl;
+      // cout << " === Object #" << num_objects << " allocated === " << endl;
       return num_objects;
     }
 
@@ -100,7 +100,7 @@ public:
       if (obj->second.obj_ptr != 0)
         obj->second.obj_ptr.reset();
       objects.erase(obj);
-      cout << " === Object #" << num_objects_deleted++ << " released === " << endl;
+      // cout << " === Object #" << num_objects_deleted++ << " released === " << endl;
     }
 
 public:

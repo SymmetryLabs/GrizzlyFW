@@ -128,7 +128,7 @@ void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup)
   * @brief  Initializes the NVIC peripheral according to the specified
   *         parameters in the NVIC_InitStruct.
   * @note   To configure interrupts priority correctly, the NVIC_PriorityGroupConfig()
-  *         function should be called before. 
+  *         function sho uld be called before. 
   * @param  NVIC_InitStruct: pointer to a NVIC_InitTypeDef structure that contains
   *         the configuration information for the specified NVIC peripheral.
   * @retval None
