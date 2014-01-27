@@ -89,8 +89,6 @@ extern char bpool_buffer[64000];
 extern uint16_t clock_rising_buffer;
 extern uint16_t clock_falling_buffer;
 
-extern void udp_colorserver_init(void);
-
 #ifdef __cplusplus
 }
 #endif

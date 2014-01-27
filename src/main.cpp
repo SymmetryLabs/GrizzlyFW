@@ -2,12 +2,8 @@ extern "C" {
  
   #include "main.h"
   #include "bget.h"
-	#include "grizzlyapp.h"
 	#include "stm32f4x7_eth.h"
 	#include "netconf.h"
-//	#include "udp_color_server.h"
-
-	#define BOOST_EXCEPTION_DISABLE
 
   /* Somewhere in header file */
   #define SYSTEMTICK_PERIOD_MS  1
@@ -74,6 +70,9 @@ extern "C" {
 } /* End extern C */
 
 #include "grizzlylib.h"
+#include "grizzlyapp.h"
+
+extern void udp_colorserver_init(GrizzlyApp*);
 
 GrizzlyApp *app;
 
@@ -83,6 +82,8 @@ int main()
   // TODO: Create BPOOL buffer in C file with 
 
   app = new GrizzlyApp();
+	
+	app->initialize();
 
   /* All of these functions are unrelated to C callbacks, no extern */
 	app->sysConfigDebug(1);
@@ -105,7 +106,7 @@ int main()
 //  udp_echoserver_init();
 
 	/* UDP Color Framebuffer server */
-	udp_colorserver_init();
+	udp_colorserver_init(app);
 
   /* Initialize all ethernet functions, must be done from extern "C"! */
   // initializeLwIP();

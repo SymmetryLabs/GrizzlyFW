@@ -1,11 +1,16 @@
+#include "grizzlylib.h"
+#include "grizzlyapp.h"
+
 extern "C" {
 	#include "main.h"
 	#include "stm32f4xx.h"
 	#include "legacy.h"
 }
 
-#include "grizzlyapp.h"
-
+void GrizzlyApp::initialize()
+{
+//	objman = new ObjectManager();
+}
 
 void GrizzlyApp::sysConfigRCC() 
 {

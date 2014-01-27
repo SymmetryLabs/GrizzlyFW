@@ -273,7 +273,7 @@
               <MiscControls>-std=c++11</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F40XX</Define>
               <Undefine></Undefine>
-              <IncludePath>..\inc;..\libs\CMSIS\Include;..\libs\CMSIS\Device\ST\STM32F4xx\Include;..\libs\STM32F4xx_StdPeriph_Driver\inc;..\libs\STM32F4x7_ETH_Driver\inc;..\libs\GrizzlyBSP\inc;..\libs\lwip-1.4.1\src\include;..\libs\lwip-1.4.1\src\include\lwip;..\libs\lwip-1.4.1\src\include\netif;..\libs\lwip-1.4.1\src\include\ipv4;..\libs\lwip-1.4.1\port\STM32F4x7;..\libs\lwip-1.4.1\port\STM32F4x7\Standalone;..\libs\bget</IncludePath>
+              <IncludePath>..\inc;..\libs\CMSIS\Include;..\libs\CMSIS\Device\ST\STM32F4xx\Include;..\libs\STM32F4xx_StdPeriph_Driver\inc;..\libs\STM32F4x7_ETH_Driver\inc;..\libs\GrizzlyBSP\inc;..\libs\lwip-1.4.1\src\include;..\libs\lwip-1.4.1\src\include\lwip;..\libs\lwip-1.4.1\src\include\netif;..\libs\lwip-1.4.1\src\include\ipv4;..\libs\lwip-1.4.1\port\STM32F4x7;..\libs\lwip-1.4.1\port\STM32F4x7\Standalone;..\libs\bget;..\libs\oscpack\osc</IncludePath>
             </VariousControls>
           </Carm>
           <Aarm>
@@ -565,6 +565,18 @@
         </Group>
         <Group>
           <GroupName>OSC</GroupName>
+          <Files>
+            <File>
+              <FileName>OscReceivedElements.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\libs\oscpack\osc\OscReceivedElements.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>OscTypes.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\libs\oscpack\osc\OscTypes.cpp</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>GrizzlyLib</GroupName>

@@ -4,12 +4,17 @@ extern "C" {
 	#include "stm32f4xx.h"
 }
 
+#include "grizzlylib.h"
+
 class GrizzlyApp {
 private:
-
+	
 public:
 	//GrizzlyApp();
 	//~GrizzlyApp();
+	
+	GrizzyLib::ObjectManager* objman;
+	void initialize();
 
 	void sysConfigRCC();
 	void sysConfigSysTick();
