@@ -1,6 +1,0 @@
-#ifndef HEADER_OBJ_FACTORY
-#define HEADER_OBJ_FACTORY
-
-
-
-#endif /* HEADER_OBJ_FACTORY */

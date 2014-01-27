@@ -32,6 +32,8 @@
 *.exe
 *.out
 *.app
+
+# Compiler outputs
 *.elf
 *.lst
 *.iex
