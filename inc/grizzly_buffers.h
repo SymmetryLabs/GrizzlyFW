@@ -19,7 +19,7 @@ namespace GrizzlyLib
     iterator last;
 
   public:
-    static const std::string& bufferType();
+    static ObjectType bufferType();
 
     iterator begin() { return first; }
     iterator end() { return last; }
@@ -57,6 +57,34 @@ namespace GrizzlyLib
   def_bufferType(SlowXYZFormat)() { return ts_s_xyz; }
   def_bufferType(DMAFormat)() { return ts_dma; }
   def_bufferType(SlowDMAFormat)() { return ts_s_dma; }
+
+  template< class sFormat >
+  struct BufferFactory
+  {
+    template<class sFormat>
+    static ObjectId allocateBuffer(ObjectManager* objman, UncastPtr block_ptr, void* start, void* finish)
+    {
+      auto start_ptr = std::static_pointer_cast< ElementBuffer<sFormat>::iterator >(start);
+      auto finish_ptr = std::static_pointer_cast< ElementBuffer<sFormat>::iterator >(finish);
+      auto obj_ptr = std::make_shared< ElementBuffer<sFormat> >(start_ptr, finish_ptr);
+      return objman->allocateObject(ElementBuffer<sFormat>::bufferType, block_ptr, obj_ptr);
+    }
+
+    template<class sFormat>
+    static ObjectId allocateBuffer(ObjectManager* objman, uint32_t size)
+    {
+        auto block_ptr = std::make_shared< std::vector<sFormat> >(size);
+        auto obj_ptr = std::make_shared< ElementBuffer<sFormat> >(&*block_ptr->begin(), &*block_ptr->end());
+        return objman->allocateObject(ElementBuffer<sFormat>::bufferType(), block_ptr, obj_ptr);
+    }
+
+    template<class sFormat>
+    static BufferPtr<sFormat> getBuffer(ObjectManager* objman, ObjectId obj_id)
+    {
+        auto obj_ptr = objman->getObject(obj_id, ElementBuffer<sFormat>::bufferType());
+        return std::static_pointer_cast< ElementBuffer<sFormat> >(obj_ptr);
+    }
+  };
 
 };
 #endif /* HEADER_COLOR_FORMATS */

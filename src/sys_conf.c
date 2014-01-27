@@ -36,6 +36,67 @@
 #include <sys/times.h>
 
 
+extern "C" {
+  /* Global C variables */
+  __IO uint32_t LocalTime = 0; /* this variable is used to create a time reference incremented by 1ms */
+  uint32_t timingdelay;
+
+  /**
+    * @brief  Inserts a delay time.
+    * @param  nCount: number of 10ms periods to wait for.
+    * @retval None
+    */
+  void Delay(uint32_t nCount)
+  {
+    /* Capture the current local time */
+    timingdelay = LocalTime + nCount;  
+
+    /* wait until the desired delay finish */  
+    while(timingdelay > LocalTime)
+    {     
+    }
+  }
+
+  /**
+    * @brief  Updates the system local time
+    * @param  None
+    * @retval None
+    */
+  void Time_Update(void)
+  {
+    LocalTime += SYSTEMTICK_PERIOD_MS;
+  }
+        
+        
+  #ifdef  USE_FULL_ASSERT
+    /**
+      * @brief  Reports the name of the source file and the source line number
+      *   where the assert_param error has occurred.
+      * @param  file: pointer to the source file name
+      * @param  line: assert_param error line source number
+      * @retval None
+      */
+    void assert_failed(uint8_t* file, uint32_t line)
+    {
+      /* User can add his own implementation to report the file name and line number,
+         ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+
+      /* Infinite loop */
+      while (1)
+      {}
+    }
+  #endif
+        
+  void *malloc(size_t size) 
+  {
+    return bget(size);
+  }
+
+  void free(void *pointer)
+  {
+    brel(pointer);
+  }
+
 /* Variables */
 #undef errno
 extern int errno;
@@ -169,4 +230,5 @@ int _execve(char *name, char **argv, char **env)
 {
         errno = ENOMEM;
         return -1;
+}
 }

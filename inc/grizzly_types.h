@@ -3,23 +3,31 @@
 
 namespace GrizzlyLib
 {
+  typedef std::shared_ptr<void> UncastPtr;
+  
+  class FrameGroup;
+  typedef std::shared_ptr<FrameGroup> FramePtr;
+  
+  class ObjectManager;
+  typedef uint32_t ObjectId;
+  typedef uint32_t ChannelId;
+  typedef const std::string& ObjectType;
+
+  struct ObjectPtr {
+            ObjectId id;
+            ObjectType type;
+            std::shared_ptr<void> mem_ptr;
+            std::shared_ptr<void> obj_ptr;
+    };
+
+  typedef std::unordered_map<ObjectId, ObjectPtr> ObjectPtrMap;
+  typedef std::unordered_map<ChannelId , std::unordered_map<std::string, ObjectId> > PendingBufferMap;
+
   template< class sElementFormat >
   class ElementBuffer;
 
-  template< class sSrcFormat, class sDestFormat >
-  class ElementConverter;
-
-  template<class sSrc1Format, class sSrc2Format, class sDestFormat >
-  class ElementInterpolator;
-
   template< class sSubObject >
   using SharedBufferPtr = std::shared_ptr< ElementBuffer<sSubObject> >;
-
-  template< class sSubObject1, class sSubObject2 >
-  using SharedConverterPtr = std::shared_ptr< ElementConverter<sSubObject1, sSubObject2> >;
-
-  template< class sSubObject1, class sSubObject2, class sSubObject3>
-  using SharedInterpolatorPtr = std::shared_ptr< ElementInterpolator<sSubObject1, sSubObject2, sSubObject3> >;
 
   template<class sFormat>
   using BufferPtr = typename ElementBuffer<sFormat>::BufferPtr;
@@ -27,15 +35,28 @@ namespace GrizzlyLib
   template<class sFormat>
   using BufferType = typename ElementBuffer<sFormat>::bufferType;
 
+  /*
+  template< class sSrcFormat, class sDestFormat >
+  class ElementConverter;
+
+  template< class sSubObject1, class sSubObject2 >
+  using SharedConverterPtr = std::shared_ptr< ElementConverter<sSubObject1, sSubObject2> >;
+
   template<class sSrcFormat, class sDestFormat>
   using ConverterPtr = typename ElementConverter<sSrcFormat,sDestFormat>::ConverterPtr;
 
   template<class sSrcFormat, class sDestFormat>
   using ConverterType = typename ElementConverter<sSrcFormat,sDestFormat>::bufferType;  
+  */
 
-  typedef uint32_t ObjectId;
-  typedef const std::string& ObjectType;
-  typedef uint32_t ChannelId;
+  /*
+  template<class sSrc1Format, class sSrc2Format, class sDestFormat >
+  class ElementInterpolator;
+
+  template< class sSubObject1, class sSubObject2, class sSubObject3>
+  using SharedInterpolatorPtr = std::shared_ptr< ElementInterpolator<sSubObject1, sSubObject2, sSubObject3> >;
+  */
+
 
   struct ARGBFormat
   {
@@ -72,12 +93,6 @@ namespace GrizzlyLib
     uint16_t R[8];
     uint16_t G[8];
     uint16_t B[8];
-  };
-
-  template< class sFormat >
-  class Format
-  {
-
   };
 };
 

@@ -79,6 +79,8 @@
 #define PHY_CLOCK_MCO
 
 
+#define SYSTEMTICK_PERIOD_MS  1
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */  
 void Time_Update(void);
@@ -88,6 +90,12 @@ extern char bpool_buffer[64000];
 
 extern uint16_t clock_rising_buffer;
 extern uint16_t clock_falling_buffer;
+
+extern __IO uint32_t LocalTime; /* this variable is used to create a time reference incremented by 1ms */
+extern uint32_t timingdelay;
+
+extern void Delay(uint32_t nCount);
+extern void Time_Update(void);
 
 #ifdef __cplusplus
 }

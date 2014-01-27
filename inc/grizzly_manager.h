@@ -1,21 +1,13 @@
 #ifndef HEADER_GRIZZLYLIB
 #define HEADER_GRIZZLYLIB
 
-#include <queue>
-#include <map>
-
-#include <memory>
-#include <cmath>
-#include <vector>
-#include <unordered_map>
-
+#include "grizzly_types.h"
 
 namespace GrizzyLib {
-
   class FrameGroup {
   private:
       /* buffers[ChannelId][ObjectType] = ObjectId */
-      std::unordered_map<ChannelId , std::unordered_map<std::string, ObjectId> > buffers;
+      PendingBufferMap buffers;
 
   public:
       friend class ObjectManager;
@@ -31,10 +23,9 @@ namespace GrizzyLib {
           return iter2->second;
       };
 
-      template<class sFormat>
-      ObjectId getChannelObjectId(ChannelId ch_id)
+      ObjectId getChannelObjectId(ChannelId ch_id, ObjectType obj_type)
       {
-          return getChannelObjectId(ch_id, BufferType<sFormat>());
+          return getChannelObjectId(ch_id, obj_type);
       }
 
       inline bool hasChannelObject(ChannelId ch_id)
@@ -63,36 +54,28 @@ namespace GrizzyLib {
       }
   };
 
-  typedef std::shared_ptr<FrameGroup> FramePtr;
-
   class ObjectManager
   {
   // private:  // TODO: CHANGE BACK TO PRIVATE!
   public:
-      struct ObjectPtr {
-              uint32_t id;
-              ObjectType type;
-              std::shared_ptr<void> mem_ptr;
-              std::shared_ptr<void> obj_ptr;
-      };
-      std::unordered_map<ObjectId, ObjectPtr> objects;
+      ObjectPtrMap objects;
       uint32_t num_objects;
       uint32_t num_objects_deleted;
 
-      std::unordered_map<ChannelId, ObjectId> pending_buffers;
+      PendingBufferMap pending_buffers;
 
-      uint32_t allocateObject(ObjectType obj_type, std::shared_ptr<void> block_ptr, std::shared_ptr<void> obj_ptr)
+      uint32_t allocateObject(ObjectType obj_type, UncastPtr block_ptr, UncastPtr obj_ptr)
       {
           num_objects++;
           objects.emplace(num_objects, ObjectPtr{ num_objects, \
-                                                                                          obj_type, \
-                                                                                          block_ptr, \
-                                                                                          obj_ptr });
-          // cout << " === Object #" << num_objects << " allocated === " << endl;
+                                                  obj_type, \
+                                                  block_ptr, \
+                                                  obj_ptr });
+          
           return num_objects;
       }
 
-      std::shared_ptr<void> getObject(ObjectId obj_id, ObjectType obj_type)
+      UncastPtr getObject(ObjectId obj_id, ObjectType obj_type)
       {
           auto iter = objects.find(obj_id);
           if (iter == objects.end())
@@ -112,7 +95,6 @@ namespace GrizzyLib {
           if (obj->second.obj_ptr != 0)
               obj->second.obj_ptr.reset();
           objects.erase(obj);
-          // cout << " === Object #" << num_objects_deleted++ << " released === " << endl;
       }
 
   public:
@@ -143,31 +125,12 @@ namespace GrizzyLib {
           releaseObject(obj_id);
       }
 
-      template<class sFormat>
-      ObjectId allocateBuffer(uint32_t size)
-      {
-          auto block_ptr = std::make_shared< std::vector<sFormat> >(size);
-          auto obj_ptr = std::make_shared< ElementBuffer<sFormat> >(&*block_ptr->begin(), &*block_ptr->end());
-          return allocateObject(ElementBuffer<sFormat>::bufferType(), block_ptr, obj_ptr);
-      }
-      
-      void releaseBuffer(ObjectId obj_id)
-      {
-          releaseObject(obj_id);
-      }
-
-      template<class sFormat>
-      BufferPtr<sFormat> getBuffer(ObjectId obj_id)
-      {
-          auto obj_ptr = getObject(obj_id, ElementBuffer<sFormat>::bufferType());
-          return std::static_pointer_cast< ElementBuffer<sFormat> >(obj_ptr);
-      }
-
       void pushPendingBuffer(ChannelId ch_id, ObjectId obj_id)
       {
           pending_buffers[ch_id] = obj_id;
       }
 
+      /*
       template<class sSrcFormat, class sDestFormat>
       ObjectId createConverter()
       {
@@ -181,12 +144,7 @@ namespace GrizzyLib {
       {
           auto obj_ptr = getObject(obj_id, ElementConverter<sSrcFormat, sDestFormat>::converterType());
           return std::static_pointer_cast< ElementConverter<sSrcFormat, sDestFormat> >(obj_ptr);
-      }
-  };
-  
-  typename<class sFormat>
-  struct FormatType {
-      //static ElementBuffer<sFormat> 
+      }*/
   };
 }
 
