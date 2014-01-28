@@ -163,7 +163,8 @@ void udp_colorserver_init(GrizzlyApp* app)
 				if (std::strcmp(ch_type[i], "argb") == 0)
 				{
 					pbuf_ref(p);
-					ObjectId obj_id = BufferFactory<ARGBFormat>::allocateBuffer(app->objman, std::shared_ptr<pbuf>(p, pbuf_free), &*(arg), &*(arg) + ch_offset[i]*sizeof(ARGBFormat));
+					std::shared_ptr<pbuf> pbuf_ptr(p, pbuf_free);
+					ObjectId obj_id = BufferFactory<ARGBFormat>::allocateBuffer(app->objman, pbuf_ptr, &*(arg), &*(arg) + ch_offset[i]*sizeof(ARGBFormat));
 					app->objman->pushPendingBuffer(ch_num[i], obj_id, "argb");
 
 					/*

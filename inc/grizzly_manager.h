@@ -54,18 +54,20 @@ namespace GrizzlyLib {
   class ObjectManager
   {
   // private:  // TODO: CHANGE BACK TO PRIVATE!
-  public:
-      ObjectPtrMap objects;
-      uint32_t num_objects;
+  private:
+      ObjectId num_objects;
       uint32_t num_objects_deleted;
 
+      ObjectPtrMap objects;
+      ObjectTypeMap object_types;
       PendingBufferMap pending_buffers;
 
+  public:
       uint32_t allocateObject(ObjectType obj_type, UncastPtr block_ptr, UncastPtr obj_ptr)
       {
           num_objects++;
-					auto struct_ptr = std::make_shared<ObjectPtr>(num_objects, obj_type, block_ptr, obj_ptr);
-          objects.insert(std::make_pair(num_objects, struct_ptr));
+          ObjectPtr* struct_ptr = new ObjectPtr(num_objects, obj_type, block_ptr, obj_ptr);
+          objects.insert(std::pair<ObjectId, ObjectPtr*>(num_objects, struct_ptr));
           
           return num_objects;
       }
@@ -89,10 +91,10 @@ namespace GrizzlyLib {
               obj->second->mem_ptr.reset();
           if (obj->second->obj_ptr != 0)
               obj->second->obj_ptr.reset();
+          delete obj->second;
           objects.erase(obj);
       }
 
-  public:
       ObjectId allocateFrame()
       {
           auto obj_ptr = std::make_shared<FrameGroup>();

@@ -26,8 +26,9 @@ namespace GrizzlyLib
 						ObjectPtr(ObjectId id_, ObjectType type_, UncastPtr mem_ptr_, UncastPtr obj_ptr_) : id(id_), type(type_), mem_ptr(mem_ptr_), obj_ptr(obj_ptr_) {} ;
     };
 
-  typedef std::unordered_map<ObjectId, std::shared_ptr<ObjectPtr> > ObjectPtrMap;
-  typedef std::unordered_map<ChannelId , std::pair<std::string, ObjectId> > PendingBufferMap;
+  typedef std::map<ObjectId, std::string> ObjectTypeMap;
+  typedef std::map<ObjectId, ObjectPtr*> ObjectPtrMap;
+  typedef std::map<ChannelId, ObjectId> PendingBufferMap;
 
   template< class sElementFormat >
   class ElementBuffer;
